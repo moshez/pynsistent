@@ -1,0 +1,8 @@
+import pprint
+from pyrsistent import v
+def silly_sum(a, b, extra=v(1, 2)):
+    extra.extend([a, b])
+    return sum(extra)
+print silly_sum(3, 4)
+print silly_sum(3, 4)
+print silly_sum(3, 4, extra=v(5))

@@ -1,0 +1,13 @@
+import pprint
+import pyrsistent
+blog = pyrsistent.m(
+    title="My blog",
+    links=pyrsistent.v("github", "twitter"),
+    posts=pyrsistent.v(
+        pyrsistent.m(title="no updates",
+                     content="I'm busy"),
+        pyrsistent.m(title="still no updates",
+                     content="still busy")))
+blog = blog.transform(["posts", 1, "content"],
+                      "pretty busy")
+pprint.pprint(pyrsistent.thaw(blog))

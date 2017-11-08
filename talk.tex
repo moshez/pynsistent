@@ -11,4 +11,141 @@
  
 \frame{\titlepage}
 
+\begin{frame}
+\frametitle{Are Squares Rectangles?}
+And what does that have to do with anything?
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{What is a Rectangle?}
+\begin{lstlisting}
+class IRectangle(Interface):
+    def get_length(self):
+        """Squares can do that"""
+    def get_width(self):
+        """Squares can do that"""
+    def set_dimensions(self, length, width):
+        """Uh oh"""
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{What is a Rectangle? (V2)}
+\begin{lstlisting}
+class IRectangle(Interface):
+    def get_length(self):
+        """Squares can do that"""
+    def get_width(self):
+        """Squares can do that"""
+    def with_dimensions(self, length, width):
+        """Returns a new rectangle"""
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{What is an array?}
+\begin{lstlisting}
+class IArrayOfThing(Interface):
+    def get_element(self, i):
+        """Returns Thing"""
+    def set_element(self, i, thing):
+        """'thing' can by any Thing"""
+\end{lstlisting}\pause
+\begin{lstlisting}
+class IArrayOfSuperthing(Interface):
+    def get_element(self, i):
+        """Returns Superthing"""
+    def set_element(self, i, superthing):
+        """'superthing' can by any Superthing"""
+\end{lstlisting} \pause
+
+You cannot implement both IArrayOfThing and IArrayOfSuperthing
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Global Mutable State}
+\begin{itemize}
+\item Evil
+\item More likely than you think
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Immutability helps!}
+\begin{lstlisting}
+@attr.s(frozen=True)
+class Rectange(object):
+    length = attr.ib()
+    width = attr.ib()
+    @classmethod
+    def with_dimensions(cls, length, width):
+        return cls(length, width)
+\end{lstlisting}\pause
+\begin{lstlisting}
+@attr.s(frozen=True)
+class Square(object):
+    side = attr.ib()
+    @classmethod
+    def with_dimensions(cls, length, width):
+        return Rectangle(length, width)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Easy Modification}
+\begin{lstlisting}
+too_long = Rectangle(100, 4)
+reasonable = attr.evolve(too_long, length=10)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Pyrsistent}
+\begin{lstlisting}
+# Vector of integers
+a = pyrsistent.v(1, 2, 3)
+# Not a vector of integers
+b = a.set(1, "hello")
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Pyrsistent performance}
+\begin{itemize}
+\item O(1) time
+\item O(1) space
+\item Optional C extension
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Transformers!}
+\lstinputlisting[language=Python,firstline=3,lastline=12]{configuration}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Transformers!}
+\begin{lstlisting}
+{'links': ['github', 'twitter'],
+ 'posts': [{'content': "I'm busy",
+            'title': 'no updates'},
+           {'content': 'pretty busy',
+            'title': 'still no updates'}],
+ 'title': 'My blog'}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{This is safe}
+\lstinputlisting[language=Python,firstline=3,lastline=5]{defaults}
+\end{frame}
+
+\begin{frame}
+\frametitle{Summary}
+\begin{itemize}
+\item Immutability rocks
+\item Immutability is not expensive
+\end{itemize}
+\end{frame}
+
 \end{document}
